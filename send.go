@@ -5,14 +5,14 @@ import (
 	"encoding/json"
 )
 
-func Send(path, method string, args map[string]string) (map[string]string, error) {
+func Send(path string, args map[string]string) (map[string]string, error) {
 	b, err := json.Marshal(args)
 	if err != nil {
 		return nil, err
 	}
 	in := bytes.NewReader(b)
 	r := bytes.NewBuffer(nil)
-	err = do(r, path, method, in)
+	err = do(r, path, "POST", in)
 	if err != nil {
 		return nil, err
 	}
