@@ -7,8 +7,8 @@ import (
 	"strings"
 )
 
-func do(w io.Writer, path string, method string, body io.Reader) error {
-	req, err := http.NewRequest(method, URL+path, body)
+func do(out io.Writer, path string, method string, in io.Reader) error {
+	req, err := http.NewRequest(method, URL+path, in)
 	if err != nil {
 		return err
 	}
@@ -20,9 +20,9 @@ func do(w io.Writer, path string, method string, body io.Reader) error {
 	if res.StatusCode != 200 {
 		b, _ := io.ReadAll(res.Body)
 		s := strings.TrimSpace(string(b))
-		return fmt.Errorf("unexpected api response: %s: %s", res.Status, s)
+		return fmt.Errorf("%s: %s", res.Status, s)
 	}
-	_, err = io.Copy(w, res.Body)
+	_, err = io.Copy(out, res.Body)
 	if err != nil {
 		return err
 	}
